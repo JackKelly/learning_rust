@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'twelve_days_of_christmas'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=twelve_days_of_christmas",
+                    "--package=twelve_days_of_christmas"
+                ],
+                "filter": {
+                    "name": "twelve_days_of_christmas",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'twelve_days_of_christmas'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=twelve_days_of_christmas",
+                    "--package=twelve_days_of_christmas"
+                ],
+                "filter": {
+                    "name": "twelve_days_of_christmas",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
