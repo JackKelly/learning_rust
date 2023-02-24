@@ -28,7 +28,7 @@ fn main() {
 
     let mut pixels = vec![0; bounds.width * bounds.height];
 
-    render(&mut pixels, &bounds, upper_left, lower_right);
+    render_parallel(&mut pixels, &bounds, upper_left, lower_right);
 
     write_image(&args[1], &pixels, bounds).expect("Error writing image file");
 
@@ -163,6 +163,44 @@ fn render(
                     Some(count) => 255 - count as u8
                 };
         }
+    }
+}
+
+fn render_parallel(
+    pixels: &mut [u8],
+    bounds: &Bound,
+    upper_left: Complex<f64>,
+    lower_right: Complex<f64>
+) {
+    let num_threads = 4;
+    let rows_per_band = bounds.height / num_threads + 1;
+
+    {
+        let bands: Vec<&mut [u8]> =
+            pixels.chunks_mut(rows_per_band * bounds.width).collect();
+
+        crossbeam::scope(|spawner| {
+            for (i, band) in bands.into_iter().enumerate() {
+                let top = rows_per_band * i;
+                let height = band.len() / bounds.width;
+                let band_bounds = Bound{width: bounds.width, height};
+                let band_upper_left =
+                    pixel_to_point(
+                        &bounds, 
+                        &Point{x: 0, y: top},
+                        upper_left, lower_right);
+                let band_lower_right = 
+                    pixel_to_point(
+                        &bounds, 
+                        &Point{x: bounds.width, y: top + height},
+                        upper_left, lower_right);
+
+                spawner.spawn(move |_| {
+                    render(band, &band_bounds, band_upper_left, band_lower_right);
+                });
+                
+            }
+        }).unwrap();
     }
 }
 
