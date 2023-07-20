@@ -1,9 +1,7 @@
 use rand::Rng;
-use rand::distributions::uniform::SampleRange;
 use std::cmp::Ordering;
 use std::io;
-use std::num::{ParseIntError, IntErrorKind};
-use std::ops::{Range, RangeInclusive};
+use std::ops::RangeInclusive;
 use std::str::FromStr;
 
 enum ResultOfGuess {
