@@ -16,7 +16,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let io_handle = io_rt.spawn(async {
         println!("Starting task on io_rt! {:?}", std::thread::current().id());
-        panic!("Panicing from io_rt!");
         std::thread::sleep(Duration::from_secs(3));
         println!("Ending task on io_rt! {:?}", std::thread::current().id());
     });
