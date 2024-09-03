@@ -15,21 +15,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     main_rt.block_on(async {
         println!("Starting main_rt! {:?}", std::thread::current().id());
 
-        let _ = main_rt
-            .spawn(async move {
-                cpu_rt_handle
-                    .spawn(async {
-                        println!(
-                            "Starting task on cpu_rt_handle! {:?}",
-                            std::thread::current().id()
-                        );
-                        std::thread::sleep(Duration::from_secs(3));
-                        println!(
-                            "Ending task on cpu_rt_handle! {:?}",
-                            std::thread::current().id()
-                        );
-                    })
-                    .await
+        let _ = cpu_rt_handle
+            .spawn(async {
+                println!(
+                    "Starting task on cpu_rt_handle! {:?}",
+                    std::thread::current().id()
+                );
+                std::thread::sleep(Duration::from_secs(3));
+                println!(
+                    "Ending task on cpu_rt_handle! {:?}",
+                    std::thread::current().id()
+                );
             })
             .await;
 
